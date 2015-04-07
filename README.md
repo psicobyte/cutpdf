@@ -9,6 +9,8 @@ Requiere la libería `pyPdf`
 
 ## Uso
 
-`cutpdf.py FileInput.pdf FileOutput.pdf`
+`cutpdf.py FileInput.pdf [ FileOutput.pdf ]`
 
 Corta verticalmente cada una de las páginas de FileInput.pdf y crea un fichero FileOutput.pdf con ellas.
+
+Si no se le pasa el nombre del fichero de salida crea uno a partir del nombre del fichero original añadiéndole el prefijo "cut_".
