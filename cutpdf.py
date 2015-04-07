@@ -18,9 +18,21 @@
 
 import copy, os, pyPdf, sys
 
-pdf_input = file(sys.argv[1], "rb")
+if len(sys.argv) > 1:
 
-nombre_output = sys.argv[2]
+    if os.path.isfile(sys.argv[1]):
+        pdf_input = file(sys.argv[1], "rb")
+    else:
+        sys.exit("file %s not found" % sys.argv[1])
+else:
+    sys.exit("falta nombre del fichero pdf")
+
+if len(sys.argv) > 2:
+    nombre_output = sys.argv[2]
+
+else:
+    new_name = "cut_" + os.path.basename(sys.argv[1])
+    nombre_output = os.path.join(os.path.dirname(sys.argv[1]), new_name)
 
 pdf_output = file(nombre_output, "wb")
 
