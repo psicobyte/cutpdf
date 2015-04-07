@@ -25,16 +25,16 @@ if len(sys.argv) > 1:
     else:
         sys.exit("file %s not found" % sys.argv[1])
 else:
-    sys.exit("falta nombre del fichero pdf")
+    sys.exit("missing origin file operand")
 
 if len(sys.argv) > 2:
-    nombre_output = sys.argv[2]
+    name_output = sys.argv[2]
 
 else:
     new_name = "cut_" + os.path.basename(sys.argv[1])
-    nombre_output = os.path.join(os.path.dirname(sys.argv[1]), new_name)
+    name_output = os.path.join(os.path.dirname(sys.argv[1]), new_name)
 
-pdf_output = file(nombre_output, "wb")
+pdf_output = file(name_output, "wb")
 
 output = pyPdf.PdfFileWriter()
 input1 = pyPdf.PdfFileReader(pdf_input)
@@ -42,16 +42,16 @@ input1 = pyPdf.PdfFileReader(pdf_input)
 pg= input1.getNumPages()
 
 for i in range(0,pg):
-    pagina1 = input1.getPage(i)
-    pagina2 = copy.copy(pagina1)
+    page1 = input1.getPage(i)
+    page2 = copy.copy(page1)
 
-    corte= (pagina1.mediaBox.getUpperRight_x() / 2, pagina1.mediaBox.getUpperRight_y())
+    cutline= (page1.mediaBox.getUpperRight_x() / 2, page1.mediaBox.getUpperRight_y())
 
-    pagina1.mediaBox.upperRight = corte
-    output.addPage(pagina1)
+    page1.mediaBox.upperRight = cutline
+    output.addPage(page1)
 
-    pagina2.mediaBox.upperLeft = corte
-    output.addPage(pagina2)
+    page2.mediaBox.upperLeft = cutline
+    output.addPage(page2)
 
 output.write(pdf_output)
 
