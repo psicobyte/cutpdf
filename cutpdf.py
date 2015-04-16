@@ -18,41 +18,53 @@
 
 import copy, os, pyPdf, sys
 
-if len(sys.argv) > 1:
+def main():
 
-    if os.path.isfile(sys.argv[1]):
-        pdf_input = file(sys.argv[1], "rb")
+    if len(sys.argv) > 1:
+
+        if os.path.isfile(sys.argv[1]):
+            name_input = sys.argv[1]
+        else:
+            sys.exit("file %s not found" % sys.argv[1])
     else:
-        sys.exit("file %s not found" % sys.argv[1])
-else:
-    sys.exit("missing origin file operand")
+        sys.exit("missing origin file operand")
 
-if len(sys.argv) > 2:
-    name_output = sys.argv[2]
+    if len(sys.argv) > 2:
+        name_output = sys.argv[2]
 
-else:
-    new_name = "cut_" + os.path.basename(sys.argv[1])
-    name_output = os.path.join(os.path.dirname(sys.argv[1]), new_name)
+    else:
+        new_name = "cut_" + os.path.basename(sys.argv[1])
+        name_output = os.path.join(os.path.dirname(sys.argv[1]), new_name)
 
-pdf_output = file(name_output, "wb")
+    cutpdf(name_input,name_output)
 
-output = pyPdf.PdfFileWriter()
-input1 = pyPdf.PdfFileReader(pdf_input)
+def cutpdf(name_input,name_output):
 
-pg= input1.getNumPages()
+    pdf_input = file(name_input, "rb")
+    pdf_output = file(name_output, "wb")
 
-for i in range(0,pg):
-    page1 = input1.getPage(i)
-    page2 = copy.copy(page1)
+    output = pyPdf.PdfFileWriter()
+    input1 = pyPdf.PdfFileReader(pdf_input)
 
-    cutline= (page1.mediaBox.getUpperRight_x() / 2, page1.mediaBox.getUpperRight_y())
+    pg= input1.getNumPages()
 
-    page1.mediaBox.upperRight = cutline
-    output.addPage(page1)
+    for i in range(0,pg):
+        page1 = input1.getPage(i)
+        page2 = copy.copy(page1)
 
-    page2.mediaBox.upperLeft = cutline
-    output.addPage(page2)
+        cutline= (page1.mediaBox.getUpperRight_x() / 2, page1.mediaBox.getUpperRight_y())
 
-output.write(pdf_output)
+        page1.mediaBox.upperRight = cutline
+        output.addPage(page1)
 
-pdf_output.close
+        page2.mediaBox.upperLeft = cutline
+        output.addPage(page2)
+
+    output.write(pdf_output)
+
+    pdf_output.close
+
+    return True
+
+if __name__ == "__main__":
+    main()
